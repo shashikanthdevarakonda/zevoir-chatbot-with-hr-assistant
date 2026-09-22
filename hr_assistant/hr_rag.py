@@ -257,9 +257,9 @@ Email:"""
     return {"reply": answer, "sources": _sources(chunks) if answer != NOT_FOUND_MSG else []}
 
 
-# =====================================================
+
 # 3. WHATSAPP MESSAGE GENERATION
-# =====================================================
+
 
 def generate_whatsapp(request_text):
     if _index is None:
@@ -299,9 +299,9 @@ WhatsApp message:"""
     return {"reply": answer, "sources": _sources(chunks) if answer != NOT_FOUND_MSG else []}
 
 
-# =====================================================
+
 # EXTRACT EMAIL / PHONE NUMBER FROM THE MESSAGE
-# =====================================================
+
 
 _EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 _PHONE_RE = re.compile(r"(?:\+?\d[\d\-\s]{8,14}\d)")
@@ -342,9 +342,9 @@ def _strip_delivery_wrapper(text):
     return cleaned if cleaned else text
 
 
-# =====================================================
+
 # INTENT ROUTING
-# =====================================================
+
 
 def classify_intent(message):
     lower = message.lower()
@@ -373,9 +373,9 @@ def classify_intent(message):
     return "qa"
 
 
-# =====================================================
+
 # "DELIVER TO ME" — fetch the answer, confirm it was sent
-# =====================================================
+
 
 def deliver_to_email(request_text, email_address):
     topic = _strip_delivery_wrapper(request_text)
