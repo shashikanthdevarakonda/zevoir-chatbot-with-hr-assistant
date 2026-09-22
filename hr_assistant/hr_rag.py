@@ -22,9 +22,8 @@ import faiss
 import numpy as np
 import requests
 
-# =====================================================
+
 # CONFIG
-# =====================================================
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FAISS_INDEX = os.path.join(BASE_DIR, "vectorstore_hr", "hr_faiss_index.bin")
@@ -51,9 +50,9 @@ DISTANCE_THRESHOLD = None
 
 NOT_FOUND_MSG = "I couldn't find this information in the uploaded documents."
 
-# =====================================================
+
 # LOAD VECTOR STORE (lazy / safe)
-# =====================================================
+
 
 _index = None
 _metadata = None
@@ -76,9 +75,8 @@ except Exception as e:
     print(f"HR Assistant: {_load_error}")
 
 
-# =====================================================
 # EMBEDDING
-# =====================================================
+
 
 def get_embedding(text):
     response = requests.post(
@@ -90,9 +88,8 @@ def get_embedding(text):
     return response.json()["embedding"]
 
 
-# =====================================================
 # RETRIEVAL
-# =====================================================
+
 
 def retrieve_chunks(query, top_k=TOP_K):
     """Returns (chunks, best_distance). chunks is [] if the store isn't loaded."""
@@ -142,9 +139,9 @@ def _sources(chunks):
     return list(seen.values())
 
 
-# =====================================================
+
 # HARD SAFETY / LEAKAGE FILTER (mirrors main rag.py's approach)
-# =====================================================
+
 
 _LEAK_PATTERNS = ["context:", "employee request:", "rules:", "as an ai", "policy context:"]
 
@@ -176,9 +173,9 @@ def _call_llm(system_prompt, user_prompt, num_predict=220):
     return response.json()["message"]["content"].strip()
 
 
-# =====================================================
+
 # 1. DOCUMENT-BASED Q&A
-# =====================================================
+
 
 def answer_question(question):
     if _index is None:
@@ -216,9 +213,9 @@ Answer:"""
     return {"reply": answer, "sources": _sources(chunks) if answer != NOT_FOUND_MSG else []}
 
 
-# =====================================================
+
 # 2. EMAIL GENERATION
-# =====================================================
+
 
 def generate_email(request_text):
     if _index is None:
@@ -432,9 +429,8 @@ def deliver_to_whatsapp(request_text, phone_number):
     return {"reply": reply, "sources": qa_result["sources"]}
 
 
-# =====================================================
 # DOMAIN CHECK (used to route the shared website widget)
-# =====================================================
+
 
 _HR_KEYWORDS = [
     "leave", "leaves", "casual", "sick", "earned", "privilege",
